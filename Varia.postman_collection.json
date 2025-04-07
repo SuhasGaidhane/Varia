@@ -1,0 +1,849 @@
+{
+	"info": {
+		"_postman_id": "7c670f6a-2345-41ed-b478-e552c51da48f",
+		"name": "Varia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40564521"
+	},
+	"item": [
+		{
+			"name": "http://localhost/Varia/AddUserSubscription.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/getListDistrict.php?MasterLoginId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"getListDistrict.php"
+					],
+					"query": [
+						{
+							"key": "MasterLoginId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/ValidateLogin.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"MobileNumber\": \"7972726558\",\r\n    \"OTP\": \"209253\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/ValidateLogin.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"ValidateLogin.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/register.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"MasterProfileId\": 1,\r\n    \"MobileNumber\": \"797272655813124\",\r\n    \"FullName\": \"John Doe\",\r\n    \"FirmName\" : \"Suhas Firm\",\r\n    \"YourAddress\" : \"Pimpalgaon sadak\",\r\n    \"MasterDistrictId\": 101,\r\n    \"MasterCityId\": 1001,\r\n    \"AvailableCredit\": 100,\r\n    \"LastUsedDate\": \"2024-02-19\",\r\n    \"Subscription\": {\r\n        \"MasterSubscriptionId\": 1,\r\n        \"district_id\": 101,\r\n        \"IsActive\": true,\r\n        \"SubscriptionStart\": \"2024-02-19\",\r\n        \"SubscriptionEnd\": \"2025-02-19\",\r\n        \"RenewalDate\": \"2025-02-19\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/register.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"register.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/getSubscriptionPlan.php?LoginId=17",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/getSubscriptionPlan.php?MasterLoginId=27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"getSubscriptionPlan.php"
+					],
+					"query": [
+						{
+							"key": "MasterLoginId",
+							"value": "27"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/getListDistrict.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/getListDistrict.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"getListDistrict.php"
+					],
+					"query": [
+						{
+							"key": "MasterLoginId",
+							"value": "20",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/ApprovingRemovingDistrictAccess.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"MasterLoginId\": 17,\r\n    \"district_id\": 4,\r\n    \"action\": \"approve\" //\"remove\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/ApprovingRemovingDistrictAccess.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"ApprovingRemovingDistrictAccess.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/AddRequestDistrict.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"MasterLoginId\": 17,\r\n    \"district_id\": 4\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/AddRequestDistrict.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"AddRequestDistrict.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/Offers/get-offers.php",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/Offers/get-offers.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"Offers",
+						"get-offers.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/Offers/add-offer.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Offer Name 1",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Description 2",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2025-01-01 00:00:00",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2025-05-27 23:59:59",
+							"type": "text"
+						},
+						{
+							"key": "is_active",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/suhas.gaidhane/Downloads/banner3.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/Varia/Offers/add-offer.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"Offers",
+						"add-offer.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/Offers/update-offer.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "offer_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "change title",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "change desc",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2025-01-02 00:00:00",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2025-06-27 23:59:59",
+							"type": "text"
+						},
+						{
+							"key": "is_active",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/suhas.gaidhane/Downloads/download (4) 2.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/Varia/Offers/update-offer.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"Offers",
+						"update-offer.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/Offers/delete-offer.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "offer_id",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/Varia/Offers/delete-offer.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"Offers",
+						"delete-offer.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/Offers/get-all-offers.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/Offers/get-all-offers.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"Offers",
+						"get-all-offers.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/validateUserNumberOnRegistration.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"mobile_number\": \"7972726558\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/validateUserNumberOnRegistration.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"validateUserNumberOnRegistration.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://www.fast2sms.com/dev/bulkV2?authorization=0DkoqrK5nNmlaGT1WhbPysAtMgj4EYFCIxvXLOe3JfBu7Z8wpUy4TW1LXa6h3ZHpGzCDbxJjSq8AkcRs&route=q&message=This is your OTP : 0508&language=english&flash=0&numbers=7972726558",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.fast2sms.com/dev/bulkV2?authorization=FPtDqYyJjRfleVo32rgGWhs91CzNEp5dXuI8ikS7ZMn6UacBLA6XE8iSQTJuWsA2eFqjkIg4vzwmUfBa&route=q&message=This is your OTP : 0508&language=english&flash=0&numbers=7972726558",
+					"protocol": "https",
+					"host": [
+						"www",
+						"fast2sms",
+						"com"
+					],
+					"path": [
+						"dev",
+						"bulkV2"
+					],
+					"query": [
+						{
+							"key": "authorization",
+							"value": "FPtDqYyJjRfleVo32rgGWhs91CzNEp5dXuI8ikS7ZMn6UacBLA6XE8iSQTJuWsA2eFqjkIg4vzwmUfBa"
+						},
+						{
+							"key": "route",
+							"value": "q"
+						},
+						{
+							"key": "message",
+							"value": "This is your OTP : 0508"
+						},
+						{
+							"key": "language",
+							"value": "english"
+						},
+						{
+							"key": "flash",
+							"value": "0"
+						},
+						{
+							"key": "numbers",
+							"value": "7972726558"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/LoginSendOTP.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mobile_number\" : 7972726558\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/LoginSendOTP.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"LoginSendOTP.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/LoginValidate.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mobile_number\": \"7972726558\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/Varia/LoginValidate.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"LoginValidate.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://graph.facebook.com/v20.0/{phone_number_id}/messages",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://graph.facebook.com/v20.0/{phone_number_id}/messages",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v20.0",
+						"{phone_number_id}",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/getAllSubscriptionPlan.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/getAllSubscriptionPlan.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"getAllSubscriptionPlan.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/update_firm.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "masterFirmId",
+							"value": "5451",
+							"type": "text"
+						},
+						{
+							"key": "shop_name",
+							"value": "Test Shop 2",
+							"type": "text"
+						},
+						{
+							"key": "proprieter_name",
+							"value": "Test Owner 1 ",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Test Lakhni Pimpalgaon sadak 1",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "Lakhni 1 ",
+							"type": "text"
+						},
+						{
+							"key": "mobile",
+							"value": "7972726558",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "suhasgaidhane123@gmail.com 1",
+							"type": "text"
+						},
+						{
+							"key": "gst",
+							"value": "15221",
+							"type": "text"
+						},
+						{
+							"key": "mfms",
+							"value": "54215   111",
+							"type": "text"
+						},
+						{
+							"key": "firm_image",
+							"type": "file",
+							"src": "/C:/Users/suhas.gaidhane/Downloads/DALL·E 2025-02-21 14.46.33 - A dynamic and action-packed superhero battle scene. The image features multiple superheroes with unique costumes and powers, engaged in an intense fig.webp"
+						},
+						{
+							"key": "firm_owner_image",
+							"type": "file",
+							"src": [
+								"/C:/Users/suhas.gaidhane/Downloads/farmer Image.jpg",
+								"/C:/Users/suhas.gaidhane/Downloads/DALL·E 2025-02-21 14.54.35 - A highly realistic and detailed portrait of a 23-year-old male developer in a modern tech workspace. He has sharp facial features, well-groomed hair, .webp"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/Varia/update_firm.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"update_firm.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/get_firm_list_master_login_id.php?masterLoginId=27",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/get_firm_list_master_login_id.php?masterLoginId=27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"get_firm_list_master_login_id.php"
+					],
+					"query": [
+						{
+							"key": "masterLoginId",
+							"value": "27"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/add_firm.php",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "shop_name",
+							"value": "Test Shop",
+							"type": "text"
+						},
+						{
+							"key": "proprieter_name",
+							"value": "Test Owner",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Test Lakhni Pimpalgaon sadak",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "Lakhni",
+							"type": "text"
+						},
+						{
+							"key": "taluka_id",
+							"value": "21",
+							"type": "text"
+						},
+						{
+							"key": "district_id",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "mobile",
+							"value": "7972726558",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "suhasgaidhane123@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "gst",
+							"value": "27AABCU9603R1ZL",
+							"type": "text"
+						},
+						{
+							"key": "mfms",
+							"value": "54215",
+							"type": "text"
+						},
+						{
+							"key": "firm_image",
+							"type": "file",
+							"src": "/C:/Users/suhas.gaidhane/Downloads/Shop IMage.png"
+						},
+						{
+							"key": "firm_owner_image",
+							"type": "file",
+							"src": "/C:/Users/suhas.gaidhane/Downloads/farmer Image.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/Varia/add_firm.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"add_firm.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/Varia/get_masterfirm.php?district_id=3",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/Varia/get_masterfirm.php?district_id=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Varia",
+						"get_masterfirm.php"
+					],
+					"query": [
+						{
+							"key": "district_id",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
