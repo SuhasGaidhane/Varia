@@ -13,6 +13,7 @@ export class DashboardComponent {
       title: 'Total Users',
       config: {
         type: 'bar',
+        license: 'none',
         series: [{ values: [50, 100, 150, 200] }],
         scaleX: { labels: ['Jan', 'Feb', 'Mar', 'Apr'] }
       }
@@ -21,6 +22,7 @@ export class DashboardComponent {
       title: 'Active Subscriptions',
       config: {
         type: 'line',
+        license: 'none',
         series: [{ values: [20, 60, 80, 120] }],
         scaleX: { labels: ['Jan', 'Feb', 'Mar', 'Apr'] }
       }
@@ -29,6 +31,7 @@ export class DashboardComponent {
       title: 'Sales This Month',
       config: {
         type: 'pie',
+        license: 'none',
         series: [
           { values: [25], text: 'Online' },
           { values: [50], text: 'Retail' },
@@ -40,6 +43,7 @@ export class DashboardComponent {
       title: 'Subscription by District',
       config: {
         type: 'bar',
+        license: 'none',
         series: [{ values: [70, 30, 50, 90] }],
         scaleX: { labels: ['Nagpur', 'Wardha', 'Amravati', 'Buldhana'] }
       }
@@ -48,6 +52,7 @@ export class DashboardComponent {
       title: 'Firms by District',
       config: {
         type: 'bar',
+        license: 'none',
         series: [{ values: [10, 20, 5, 15] }],
         scaleX: { labels: ['Nagpur', 'Wardha', 'Amravati', 'Buldhana'] }
       }
@@ -58,6 +63,7 @@ export class DashboardComponent {
     {
       name: 'User 1',
       mobile: '98765432101',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [
         {
@@ -112,6 +118,7 @@ export class DashboardComponent {
     {
       name: 'User 2',
       mobile: '98765432102',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [
         {
@@ -153,6 +160,7 @@ export class DashboardComponent {
     {
       name: 'User 3',
       mobile: '98765432103',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -179,6 +187,7 @@ export class DashboardComponent {
     {
       name: 'User 4',
       mobile: '98765432104',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [
         {
@@ -220,6 +229,7 @@ export class DashboardComponent {
     {
       name: 'User 5',
       mobile: '98765432105',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -246,6 +256,7 @@ export class DashboardComponent {
     {
       name: 'User 6',
       mobile: '98765432106',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [
         {
@@ -287,6 +298,7 @@ export class DashboardComponent {
     {
       name: 'User 7',
       mobile: '98765432107',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -313,6 +325,7 @@ export class DashboardComponent {
     {
       name: 'User 8',
       mobile: '98765432108',
+      otherNumbers: '7972726558, 8530412675',
       address: 'Nagpur',
       subscriptions: [
         {
