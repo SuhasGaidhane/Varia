@@ -1,0 +1,276 @@
+<div class="offers-subscription-container">
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <div class="tab" [ngClass]="{'active': activeTab === 'offers'}" (click)="switchTab('offers')">
+      <mat-icon>local_offer</mat-icon>
+      <span>Offers</span>
+    </div>
+    <div class="tab" [ngClass]="{'active': activeTab === 'subscriptions'}" (click)="switchTab('subscriptions')">
+      <mat-icon>card_membership</mat-icon>
+      <span>Subscription Plans</span>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Offers Tab -->
+    <div *ngIf="activeTab === 'offers'" class="offers-section">
+      <div class="section-header">
+        <h2>Offers Management</h2>
+        <button mat-raised-button color="primary" class="add-button" (click)="editOffer()">
+          <mat-icon>add</mat-icon> Add New Offer
+        </button>
+      </div>
+
+      <div class="offers-grid">
+        <mat-card *ngFor="let offer of offers" class="offer-card">
+          <div class="status-badge" [ngClass]="{'active': offer.isActive, 'inactive': !offer.isActive}">
+            {{ offer.isActive ? 'Active' : 'Inactive' }}
+          </div>
+          <img mat-card-image [src]="offer.imageUrl" alt="Offer image">
+          <mat-card-header>
+            <mat-card-title>{{ offer.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ offer.description }}</p>
+            <div class="date-container">
+              <div class="date-item">
+                <span class="label">Start Date:</span>
+                <span class="value">{{ offer.startDate | date:'mediumDate' }}</span>
+              </div>
+              <div class="date-item">
+                <span class="label">End Date:</span>
+                <span class="value">{{ offer.endDate | date:'mediumDate' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button color="primary" (click)="editOffer(offer)">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button mat-button color="warn" (click)="confirmDeleteOffer(offer)">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+            <button mat-button (click)="toggleOfferStatus(offer)">
+              <mat-icon>{{ offer.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+              {{ offer.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Subscription Plans Tab -->
+    <div *ngIf="activeTab === 'subscriptions'" class="subscription-section">
+<!--      <div class="section-header">-->
+<!--        <h2>Subscription Plans</h2>-->
+<!--      </div>-->
+
+      <div class="subscription-plans-container">
+        <div *ngFor="let plan of subscriptionPlans" class="plan-card" [ngClass]="{'popular': plan.popularTag}">
+          <div *ngIf="plan.popularTag" class="popular-tag">{{ plan.popularTag }}</div>
+          <div class="plan-header">
+            <h3>{{ plan.name }}</h3>
+          </div>
+          <div class="plan-price">
+            <span class="currency">₹</span>{{ plan.price }}
+          </div>
+          <div class="plan-details">
+            <div class="plan-detail">
+              <mat-icon>credit_card</mat-icon>
+              <span>Credits: {{ plan.credits }}</span>
+            </div>
+            <div class="plan-detail">
+              <mat-icon>date_range</mat-icon>
+              <span>Duration: {{ plan.duration }} months</span>
+            </div>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li *ngFor="let feature of plan.features">{{ feature }}</li>
+            </ul>
+          </div>
+          <div class="plan-actions">
+            <button mat-raised-button color="primary" class="subscribe-button">Subscribe Now</button>
+            <button mat-icon-button color="accent" class="edit-button" (click)="editSubscriptionPlan(plan)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Offer Dialog -->
+<div *ngIf="showEditOfferDialog" class="dialog-overlay">
+  <div class="dialog-container">
+    <div class="dialog-header">
+      <h2>{{ currentOffer ? 'Edit Offer' : 'Add New Offer' }}</h2>
+      <button mat-icon-button (click)="closeOfferDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="dialog-content">
+      <form [formGroup]="offerForm" (ngSubmit)="saveOffer()">
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="Offer Title">
+            <mat-error *ngIf="offerForm.get('title')?.hasError('required')">Title is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3" placeholder="Offer Description"></textarea>
+            <mat-error *ngIf="offerForm.get('description')?.hasError('required')">Description is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+              <mat-error *ngIf="offerForm.get('startDate')?.hasError('required')">Start date is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+              <mat-error *ngIf="offerForm.get('endDate')?.hasError('required')">End date is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="file-upload-label">
+            <span>Offer Image</span>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="file-input">
+            <button type="button" mat-stroked-button>
+              <mat-icon>file_upload</mat-icon> Upload Image
+            </button>
+          </label>
+
+          <div *ngIf="previewImage" class="image-preview">
+            <img [src]="previewImage" alt="Preview">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <mat-slide-toggle formControlName="isActive">
+            {{ offerForm.get('isActive')?.value ? 'Active' : 'Inactive' }}
+          </mat-slide-toggle>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" mat-button (click)="closeOfferDialog()">Cancel</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="offerForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Dialog -->
+<div *ngIf="showDeleteDialog" class="dialog-overlay">
+  <div class="dialog-container delete-dialog">
+    <div class="dialog-header">
+      <h2>Confirm Delete</h2>
+      <button mat-icon-button (click)="closeDeleteDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="dialog-content">
+      <p>Are you sure you want to delete the offer "{{ offerToDelete?.title }}"?</p>
+      <p class="warning-text">This action cannot be undone.</p>
+    </div>
+
+    <div class="dialog-actions">
+      <button mat-button (click)="closeDeleteDialog()">Cancel</button>
+      <button mat-raised-button color="warn" (click)="deleteOffer()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Subscription Plan Dialog -->
+<div *ngIf="showEditSubscriptionDialog" class="dialog-overlay">
+  <div class="dialog-container">
+    <div class="dialog-header">
+      <h2>Edit Subscription Plan</h2>
+      <button mat-icon-button (click)="closeSubscriptionDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="dialog-content">
+      <form [formGroup]="subscriptionForm" (ngSubmit)="saveSubscriptionPlan()">
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Plan Name</mat-label>
+            <input matInput formControlName="name" placeholder="e.g. Basic, Standard, Premium">
+            <mat-error *ngIf="subscriptionForm.get('name')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Price (₹)</mat-label>
+              <input matInput type="number" formControlName="price" min="0">
+              <mat-error *ngIf="subscriptionForm.get('price')?.hasError('required')">Price is required</mat-error>
+              <mat-error *ngIf="subscriptionForm.get('price')?.hasError('min')">Price must be positive</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Credits</mat-label>
+              <input matInput type="number" formControlName="credits" min="0">
+              <mat-error *ngIf="subscriptionForm.get('credits')?.hasError('required')">Credits are required</mat-error>
+              <mat-error *ngIf="subscriptionForm.get('credits')?.hasError('min')">Credits must be positive</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Duration (months)</mat-label>
+            <input matInput type="number" formControlName="duration" min="1">
+            <mat-error *ngIf="subscriptionForm.get('duration')?.hasError('required')">Duration is required</mat-error>
+            <mat-error *ngIf="subscriptionForm.get('duration')?.hasError('min')">Duration must be at least 1 month</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Features (one per line)</mat-label>
+            <textarea matInput formControlName="features" rows="5" placeholder="Enter features, one per line"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Popular Tag (leave empty if not popular)</mat-label>
+            <input matInput formControlName="popularTag" placeholder="e.g. Most Popular">
+          </mat-form-field>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" mat-button (click)="closeSubscriptionDialog()">Cancel</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="subscriptionForm.invalid">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

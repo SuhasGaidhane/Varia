@@ -1,0 +1,161 @@
+.manage-firm {
+  padding: 2rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    h2 {
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+
+      .search-input,
+      .dropdown {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        min-width: 200px;
+      }
+
+      .add-btn {
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+
+        .icon {
+          font-size: 1.2rem;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+
+  .table-wrapper {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+
+    .firm-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f5f5f5;
+      }
+
+      .firm-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .action-buttons {
+        button {
+          margin-right: 0.5rem;
+          padding: 0.4rem 0.8rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &.edit-btn {
+            background-color: #ffc107;
+            color: white;
+          }
+
+          &.delete-btn {
+            background-color: #f44336;
+            color: white;
+          }
+        }
+      }
+
+      .no-data {
+        text-align: center;
+        font-style: italic;
+        color: gray;
+      }
+    }
+  }
+
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+
+    .popup-content {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      width: 600px;
+      max-width: 95%;
+      box-sizing: border-box;
+      overflow-y: auto;
+      max-height: 90vh;
+
+      .form-row {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1rem;
+
+        .form-group {
+          flex: 1;
+        }
+      }
+
+      .form-group {
+        label {
+          display: block;
+          margin-bottom: 0.25rem;
+        }
+
+        input,
+        select {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+
+        .preview-img {
+          width: 100px;
+          height: 100px;
+          margin-top: 0.5rem;
+          object-fit: cover;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+      }
+
+      .popup-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+      }
+    }
+
+  }
+}

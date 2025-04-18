@@ -1,0 +1,168 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <div class="graph-section" >
+    <div class="graph-card" *ngFor="let graph of graphList">
+      <h4>{{ graph.title }}</h4>
+      <zingchart-angular
+        [config]="graph.config"
+        [height]="220"
+        [width]="240">
+      </zingchart-angular>
+    </div>
+  </div>
+
+  <div class="users-section">
+    <h2>Users List</h2>
+    <input type="text" placeholder="Search user..." [(ngModel)]="searchTerm" class="search-box" />
+    <table class="users-table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Subscription</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of filteredUsers()">
+        <td>{{ user.name }}</td>
+        <td>{{ user.mobile }}</td>
+        <td>
+          <span *ngIf="(user.subscriptions || []).length > 0">
+    <span
+      *ngIf="isSubscriptionActiveUserList(user.subscriptions)"
+      class="status-icon active"
+      title="Active Subscription">🟢 Active</span>
+
+    <span
+      *ngIf="!isSubscriptionActiveUserList(user.subscriptions)"
+      class="status-icon expired"
+      title="Expired Subscription">🔴 Expire</span>
+  </span>
+          <span *ngIf="(user.subscriptions || []).length === 0"
+                class="status-icon none"
+                title="No Subscription">⚪ No Subscription</span>
+        </td>
+        <td>
+          <button (click)="viewUser(user)" class="btn info">Info</button>
+          <button (click)="editUser(user)" class="btn edit">Edit</button>
+          <button (click)="deleteUser(user)" class="btn delete">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- User Info Dialog -->
+  <div class="dialog-overlay" *ngIf="selectedUser && !editingUser">
+    <div class="dialog-box animate">
+      <div class="row">
+        <h3>User Info</h3>
+        <button class="btn close" (click)="selectedUser = null">Close</button>
+      </div>
+      <div class="user-info-row">
+        <span><strong>Name:</strong> {{ selectedUser.name }}</span>
+        <span><strong>Mobile:</strong> {{ selectedUser.mobile }}</span>
+        <span><strong>Address:</strong> {{ selectedUser.address }}</span>
+        <span><strong>Credits:</strong> {{ selectedUser.credits }}</span>
+      </div>
+
+      <div class="dialog-row">
+        <!-- Firms Section -->
+        <div class="dialog-col">
+          <h4>Firms</h4>
+          <div *ngFor="let firm of selectedUser.firms" class="info-card">
+            <p><strong>Name:</strong> {{ firm.name }}</p>
+            <p><strong>District:</strong> {{ firm.district }}</p>
+            <div class="actions">
+              <span class="info-icon" (click)="viewFirmDetails(firm)">ℹ️</span>
+              <button class="btn small edit" (click)="editFirm(firm)">Edit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscriptions Section -->
+        <div class="dialog-col">
+          <h4>Subscriptions</h4>
+          <div *ngFor="let sub of selectedUser.subscriptions" class="info-card"
+               [ngClass]="{
+               'green-card': isSubscriptionActive(sub),
+               'red-card': isSubscriptionExpired(sub)
+             }">
+            <p><strong>District:</strong> {{ sub.district }}</p>
+            <p><strong>Plan:</strong> {{ sub.plan }}</p>
+            <p><strong>Start:</strong> {{ sub.startDate }}</p>
+            <p><strong>End:</strong> {{ sub.endDate }}</p>
+          </div>
+        </div>
+        <!-- Sent Messages by District -->
+        <div class="dialog-col">
+          <h4>Sent Messages</h4>
+          <div *ngFor="let district of getMessageDistricts(selectedUser)">
+            <h5>{{ district }}</h5>
+            <ul>
+              <li *ngFor="let msg of getMessagesByDistrict(selectedUser, district)">
+                <button (click)="openMessageDialog(msg)">
+                  {{ msg.date }} - {{ msg.count }} messages
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="button-row">
+        <button class="btn close" (click)="selectedUser = null">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Details Dialog -->
+  <div class="dialog-overlay" *ngIf="selectedMessage">
+    <div class="dialog-box animate">
+      <h3>Messages on {{ selectedMessage.date }}</h3>
+      <p><strong>Message:</strong> {{ selectedMessage.text }}</p>
+      <p><strong>Recipients:</strong></p>
+      <ul>
+        <li *ngFor="let user of selectedMessage.receivers">{{ user }}</li>
+      </ul>
+      <div class="button-row">
+        <button class="btn close" (click)="selectedMessage = null">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Firm Dialog -->
+  <div class="dialog-overlay" *ngIf="editingFirm">
+    <div class="dialog-box animate">
+      <h3>Edit Firm</h3>
+      <div class="dialog-row">
+        <label>Name: <input [(ngModel)]="editingFirm.name"></label>
+        <label>Owner: <input [(ngModel)]="editingFirm.owner"></label>
+        <label>Address: <input [(ngModel)]="editingFirm.address"></label>
+        <label>District: <input [(ngModel)]="editingFirm.district"></label>
+        <label>GST: <input [(ngModel)]="editingFirm.gst"></label>
+        <label>Image: <input type="file" (change)="onImageChange($event)"></label>
+        <img *ngIf="editingFirm.image" [src]="editingFirm.image" alt="Firm Image" width="100">
+      </div>
+      <div class="button-row">
+        <button class="btn save" (click)="saveFirm()">Save</button>
+        <button class="btn close" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit User Dialog -->
+  <div class="dialog-overlay" *ngIf="editingUser">
+    <div class="dialog-box animate">
+      <h3>Edit User</h3>
+      <div class="dialog-row">
+        <label>Name: <input [(ngModel)]="editingUser.name"></label>
+        <label>Mobile: <input [(ngModel)]="editingUser.mobile"></label>
+      </div>
+      <div class="button-row">
+        <button class="btn save" (click)="saveUser()">Save</button>
+        <button class="btn close" (click)="cancelEditUser()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

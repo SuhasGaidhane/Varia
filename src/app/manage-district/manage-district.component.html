@@ -1,0 +1,60 @@
+<div class="container">
+  <h2>Manage Districts</h2>
+
+  <button mat-flat-button color="primary" (click)="openDialog()">Add District</button>
+
+  <table mat-table [dataSource]="districts" class="mat-elevation-z4 full-width">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let district">{{ district.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>District</th>
+      <td mat-cell *matCellDef="let district">{{ district.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef>State</th>
+      <td mat-cell *matCellDef="let district">{{ district.state }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let district">
+        <button mat-icon-button color="accent" (click)="openDialog(district)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteDistrict(district.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id', 'name', 'state', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'state', 'actions'];"></tr>
+  </table>
+</div>
+
+<!-- Inline Dialog -->
+<div class="dialog-backdrop" *ngIf="dialogVisible">
+  <div class="dialog-box">
+    <h3>{{ isEditMode ? 'Edit District' : 'Add District' }}</h3>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>District Name</mat-label>
+      <input matInput [(ngModel)]="currentDistrict.name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>State</mat-label>
+      <input matInput [(ngModel)]="currentDistrict.state">
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-button (click)="closeDialog()">Cancel</button>
+      <button mat-flat-button color="primary" (click)="saveDistrict()">Save</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<section class="manage-firm">
+  <div class="header">
+    <h2>Manage Firm</h2>
+    <div class="actions">
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Search by firm name or owner" class="search-input" />
+      <select [(ngModel)]="selectedDistrict" class="dropdown">
+        <option value="">All Districts</option>
+        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+      </select>
+      <button class="add-btn" (click)="openPopup()">
+        <span class="icon">+</span> Add Firm
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="firm-table">
+      <thead>
+      <tr>
+        <th>Image</th>
+        <th>Firm Name</th>
+        <th>Owner</th>
+        <th>Mobile</th>
+        <th>Address</th>
+        <th>District</th>
+        <th>GST No.</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let firm of filteredFirms(); let i = index">
+        <td><img [src]="firm.image" alt="Firm Image" class="firm-img" /></td>
+        <td>{{ firm.name }}</td>
+        <td>{{ firm.owner }}</td>
+        <td>{{ firm.mobile }}</td>
+        <td>{{ firm.address }}</td>
+        <td>{{ firm.district }}</td>
+        <td>{{ firm.gst }}</td>
+        <td class="action-buttons">
+          <button class="edit-btn" (click)="openPopup(firm)">Edit</button>
+          <button class="delete-btn" (click)="deleteFirm(firm)">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredFirms().length === 0">
+        <td colspan="7" class="no-data">No firms found.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="popup-overlay" *ngIf="popupVisible">
+    <div class="popup-content">
+      <h3>{{ editingFirm ? 'Edit Firm' : 'Add Firm' }}</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Firm Name:</label>
+          <input [(ngModel)]="formData.name" />
+        </div>
+
+        <div class="form-group">
+          <label>Owner Name:</label>
+          <input [(ngModel)]="formData.owner" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mobile Number:</label>
+          <input [(ngModel)]="formData.mobile" type="tel" maxlength="10" placeholder="e.g. 9876543210" />
+        </div>
+
+        <div class="form-group">
+          <label>Address:</label>
+          <input [(ngModel)]="formData.address" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>District:</label>
+          <select [(ngModel)]="formData.district">
+            <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>GST No:</label>
+          <input [(ngModel)]="formData.gst" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Upload Photo:</label>
+          <input type="file" (change)="handleImageUpload($event)" />
+          <img *ngIf="formData.image" [src]="formData.image" class="preview-img" alt="Preview" />
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button class="save-btn" (click)="saveFirm()">Save</button>
+        <button class="cancel-btn" (click)="closePopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</section>

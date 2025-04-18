@@ -1,0 +1,91 @@
+<div class="admin-panel">
+  <header class="top-bar">
+    <div class="left-section">
+      <button class="menu-toggle" (click)="toggleSidebar()">☰</button>
+      <img src="assets/varia_logo.png" alt="Company Logo" class="logo" />
+    </div>
+    <div class="right-section" (mouseenter)="showUserMenu = true" (mouseleave)="showUserMenu = false">
+      <span class="user-name">Welcome, {{ loggedInUser }}</span>
+      <div class="user-menu" *ngIf="showUserMenu">
+<!--        <div (click)="userManagement()">👤 User Management</div>-->
+        <div (click)="openPasswordDialog()">🔒 Change Password</div>
+        <div (click)="openLogoutDialog()">🚪 Logout</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+      <nav>
+        <ul>
+          <li
+            [class.active]="selectedSection === 'dashboard'"
+            (click)="selectSection('dashboard')">
+            📊 <span *ngIf="!isSidebarCollapsed">Dashboard</span>
+          </li>
+          <li
+            [class.active]="selectedSection === 'manageFirm'"
+            (click)="selectSection('manageFirm')">
+            🏢 <span *ngIf="!isSidebarCollapsed">Manage Firm</span>
+          </li>
+          <li
+            [class.active]="selectedSection === 'manageDistrict'"
+            (click)="selectSection('manageDistrict')">
+            🗺️ <span *ngIf="!isSidebarCollapsed">Manage District</span>
+          </li>
+          <li
+            [class.active]="selectedSection === 'offers-and-subscription'"
+            (click)="selectSection('offers-and-subscription')">
+            🎁️ <span *ngIf="!isSidebarCollapsed">Offers and Subscription</span>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <app-dashboard *ngIf="selectedSection === 'dashboard'"></app-dashboard>
+      <app-manage-firm *ngIf="selectedSection === 'manageFirm'"></app-manage-firm>
+      <app-manage-district *ngIf="selectedSection === 'manageDistrict'"></app-manage-district>
+      <app-offers-subscription *ngIf="selectedSection === 'offers-and-subscription'"></app-offers-subscription>
+    </main>
+  </div>
+
+  <div class="dialog-overlay" *ngIf="showPasswordDialog">
+    <div class="dialog-box animate">
+      <h3>Change Password</h3>
+      <div class="dialog-content">
+        <div class="form-group">
+          <label for="currentPassword">Current Password</label>
+          <input type="password" id="currentPassword" [(ngModel)]="currentPassword">
+        </div>
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" [(ngModel)]="newPassword">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword">
+        </div>
+      </div>
+      <div class="button-row">
+        <button class="btn save" (click)="changePassword()">Update Password</button>
+        <button class="btn close" (click)="closePasswordDialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Dialog -->
+  <div class="dialog-overlay" *ngIf="showLogoutDialog">
+    <div class="dialog-box animate">
+      <h3>Confirm Logout</h3>
+      <div class="dialog-content">
+        <p>Are you sure you want to logout?</p>
+      </div>
+      <div class="button-row">
+        <button class="btn save" (click)="logout()">Yes, Logout</button>
+        <button class="btn close" (click)="closeLogoutDialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
