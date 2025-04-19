@@ -3,14 +3,39 @@
     <h2>Manage Firm</h2>
     <div class="actions">
       <input type="text" [(ngModel)]="searchQuery" placeholder="Search by firm name or owner" class="search-input" />
-      <select [(ngModel)]="selectedDistrict" class="dropdown">
+      <select [(ngModel)]="selectedDistrict" (change)="onFilterDistrictChange()" class="dropdown">
         <option value="">All Districts</option>
         <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+      </select>
+      <select *ngIf="selectedDistrict !== ''" [(ngModel)]="selectedTaluka" class="dropdown">
+        <option value="">All Talukas</option>
+        <option *ngFor="let taluka of filterTalukas" [value]="taluka">{{ taluka }}</option>
       </select>
       <button class="add-btn" (click)="openPopup()">
         <span class="icon">+</span> Add Firm
       </button>
     </div>
+  </div>
+
+  <div class="status-filter">
+    <button
+      class="filter-btn"
+      [class.active]="activeStatusFilter === 'all'"
+      (click)="setActiveStatusFilter('all')">
+      All Firms
+    </button>
+    <button
+      class="filter-btn"
+      [class.active]="activeStatusFilter === 'active'"
+      (click)="setActiveStatusFilter('active')">
+      Active Firms
+    </button>
+    <button
+      class="filter-btn"
+      [class.active]="activeStatusFilter === 'inactive'"
+      (click)="setActiveStatusFilter('inactive')">
+      Inactive Firms
+    </button>
   </div>
 
   <div class="table-wrapper">
@@ -20,29 +45,50 @@
         <th>Image</th>
         <th>Firm Name</th>
         <th>Owner</th>
-        <th>Mobile</th>
+        <th>WhatsApp Number</th>
+        <th>Other Mobile</th>
+        <th>Email</th>
         <th>Address</th>
+        <th>Taluka</th>
         <th>District</th>
         <th>GST No.</th>
+        <th>MFMS Number</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let firm of filteredFirms(); let i = index">
+      <tr *ngFor="let firm of filteredFirms(); let i = index" [class.inactive-row]="!firm.isActive">
         <td><img [src]="firm.image" alt="Firm Image" class="firm-img" /></td>
         <td>{{ firm.name }}</td>
         <td>{{ firm.owner }}</td>
         <td>{{ firm.mobile }}</td>
+        <td>{{ firm.otherMobile }}</td>
+        <td>{{ firm.email }}</td>
         <td>{{ firm.address }}</td>
+        <td>{{ firm.taluka }}</td>
         <td>{{ firm.district }}</td>
         <td>{{ firm.gst }}</td>
+        <td>{{ firm.mfmsNumber }}</td>
+        <td>
+          <span class="status-badge" [class.active]="firm.isActive" [class.inactive]="!firm.isActive">
+            {{ firm.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
         <td class="action-buttons">
           <button class="edit-btn" (click)="openPopup(firm)">Edit</button>
           <button class="delete-btn" (click)="deleteFirm(firm)">Delete</button>
+          <button
+            class="status-btn"
+            [class.activate-btn]="!firm.isActive"
+            [class.deactivate-btn]="firm.isActive"
+            (click)="toggleFirmStatus(firm)">
+            {{ firm.isActive ? 'Deactivate' : 'Activate' }}
+          </button>
         </td>
       </tr>
       <tr *ngIf="filteredFirms().length === 0">
-        <td colspan="7" class="no-data">No firms found.</td>
+        <td colspan="13" class="no-data">No firms found.</td>
       </tr>
       </tbody>
     </table>
@@ -66,8 +112,20 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Mobile Number:</label>
+          <label>WhatsApp Number:</label>
           <input [(ngModel)]="formData.mobile" type="tel" maxlength="10" placeholder="e.g. 9876543210" />
+        </div>
+
+        <div class="form-group">
+          <label>Other Mobile Number:</label>
+          <input [(ngModel)]="formData.otherMobile" type="tel" maxlength="10" placeholder="e.g. 9876543210" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email:</label>
+          <input [(ngModel)]="formData.email" type="email" placeholder="e.g. example@email.com" />
         </div>
 
         <div class="form-group">
@@ -78,15 +136,31 @@
 
       <div class="form-row">
         <div class="form-group">
+          <label>GST No:</label>
+          <input [(ngModel)]="formData.gst" />
+        </div>
+
+        <div class="form-group">
+          <label>MFMS Number:</label>
+          <input [(ngModel)]="formData.mfmsNumber" placeholder="e.g. MFMS12345678" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
           <label>District:</label>
-          <select [(ngModel)]="formData.district">
+          <select [(ngModel)]="formData.district" (change)="onDistrictChange()">
+            <option value="">Select District</option>
             <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>GST No:</label>
-          <input [(ngModel)]="formData.gst" />
+          <label>Taluka:</label>
+          <select [(ngModel)]="formData.taluka">
+            <option value="">Select Taluka</option>
+            <option *ngFor="let taluka of availableTalukas" [value]="taluka">{{ taluka }}</option>
+          </select>
         </div>
       </div>
 
@@ -96,6 +170,16 @@
           <input type="file" (change)="handleImageUpload($event)" />
           <img *ngIf="formData.image" [src]="formData.image" class="preview-img" alt="Preview" />
         </div>
+
+        <div class="form-group status-toggle">
+          <label>Firm Status:</label>
+          <div class="toggle-container">
+            <input type="checkbox" [(ngModel)]="formData.isActive" id="status-toggle" />
+            <label for="status-toggle" class="toggle-label">
+              {{ formData.isActive ? 'Active' : 'Inactive' }}
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="popup-actions">
@@ -104,5 +188,4 @@
       </div>
     </div>
   </div>
-
 </section>

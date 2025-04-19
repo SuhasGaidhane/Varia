@@ -1,60 +1,160 @@
-<div class="container">
-  <h2>Manage Districts</h2>
+<div class="district-management">
+  <div class="header">
+    <h2>District & Taluka Management</h2>
+    <button class="add-btn" (click)="openDistrictDialog()">
+      <span class="icon">+</span> Add District
+    </button>
+  </div>
 
-  <button mat-flat-button color="primary" (click)="openDialog()">Add District</button>
+  <div class="district-list">
+    <div *ngFor="let district of districts" class="district-card" [ngClass]="{'inactive': !district.isActive}">
+      <div class="district-header">
+        <div class="district-title">
+          <h3>{{ district.name }}</h3>
+          <span class="status-badge" [ngClass]="{'active': district.isActive, 'inactive': !district.isActive}">
+            {{ district.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+        <div class="district-actions">
+          <button class="status-btn" (click)="toggleDistrictStatus(district)" [ngClass]="{'activate': !district.isActive, 'deactivate': district.isActive}">
+            <i class="fas" [ngClass]="{'fa-toggle-on': district.isActive, 'fa-toggle-off': !district.isActive}"></i>
+            {{ district.isActive ? 'Deactivate' : 'Activate' }}
+          </button>
+          <button class="edit-btn" (click)="openDistrictDialog(district)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="delete-btn" (click)="deleteDistrict(district.id)">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
 
-  <table mat-table [dataSource]="districts" class="mat-elevation-z4 full-width">
+      <div class="talukas-container">
+        <div class="talukas-header">
+          <h4>Talukas</h4>
+          <button class="add-taluka-btn" (click)="openTalukaDialog(district)">
+            <span class="icon">+</span> Add Taluka
+          </button>
+        </div>
 
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let district">{{ district.id }}</td>
-    </ng-container>
+        <div class="talukas-list" *ngIf="district.talukas && district.talukas.length > 0">
+          <table class="taluka-table">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let taluka of district.talukas" [ngClass]="{'inactive-row': !taluka.isActive}">
+              <td>{{ taluka.id }}</td>
+              <td>{{ taluka.name }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="{'active': taluka.isActive, 'inactive': !taluka.isActive}">
+                  {{ taluka.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="taluka-actions">
+                <button class="status-btn-small" (click)="toggleTalukaStatus(district.id, taluka)" [ngClass]="{'activate': !taluka.isActive, 'deactivate': taluka.isActive}">
+                  <mat-icon>{{ taluka.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                </button>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>District</th>
-      <td mat-cell *matCellDef="let district">{{ district.name }}</td>
-    </ng-container>
+                <button class="edit-btn-small" (click)="openTalukaDialog(district, taluka)">
+                  <mat-icon>edit</mat-icon>
+                </button>
 
-    <ng-container matColumnDef="state">
-      <th mat-header-cell *matHeaderCellDef>State</th>
-      <td mat-cell *matCellDef="let district">{{ district.state }}</td>
-    </ng-container>
+                <button class="delete-btn-small" (click)="deleteTaluka(district.id, taluka.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let district">
-        <button mat-icon-button color="accent" (click)="openDialog(district)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteDistrict(district.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['id', 'name', 'state', 'actions']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'state', 'actions'];"></tr>
-  </table>
-</div>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 
-<!-- Inline Dialog -->
-<div class="dialog-backdrop" *ngIf="dialogVisible">
-  <div class="dialog-box">
-    <h3>{{ isEditMode ? 'Edit District' : 'Add District' }}</h3>
+        <div class="empty-talukas" *ngIf="!district.talukas || district.talukas.length === 0">
+          <p>No talukas found. Add a taluka to get started.</p>
+        </div>
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>District Name</mat-label>
-      <input matInput [(ngModel)]="currentDistrict.name">
-    </mat-form-field>
+    <div class="empty-districts" *ngIf="districts.length === 0">
+      <p>No districts found. Add a district to get started.</p>
+    </div>
+  </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>State</mat-label>
-      <input matInput [(ngModel)]="currentDistrict.state">
-    </mat-form-field>
+  <!-- District Dialog -->
+  <div class="dialog-backdrop" *ngIf="districtDialogVisible">
+    <div class="dialog-box">
+      <div class="dialog-header">
+        <h3>{{ isEditMode ? 'Edit District' : 'Add District' }}</h3>
+        <button class="close-btn" (click)="closeDistrictDialog()">×</button>
+      </div>
 
-    <div class="actions">
-      <button mat-button (click)="closeDialog()">Cancel</button>
-      <button mat-flat-button color="primary" (click)="saveDistrict()">Save</button>
+      <div class="dialog-content">
+        <div class="form-group">
+          <label>District Name</label>
+          <input type="text" [(ngModel)]="currentDistrict.name" placeholder="Enter district name">
+        </div>
+
+        <div class="form-group">
+          <label class="status-label">Status</label>
+          <div class="toggle-container">
+            <label class="switch">
+              <input type="checkbox" [(ngModel)]="currentDistrict.isActive">
+              <span class="slider round"></span>
+            </label>
+            <span class="status-text">{{ currentDistrict.isActive ? 'Active' : 'Inactive' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="cancel-btn" (click)="closeDistrictDialog()">Cancel</button>
+        <button class="save-btn" (click)="saveDistrict()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Taluka Dialog -->
+  <div class="dialog-backdrop" *ngIf="talukaDialogVisible">
+    <div class="dialog-box">
+      <div class="dialog-header">
+        <h3>{{ isEditModeTaluka ? 'Edit Taluka' : 'Add Taluka' }}</h3>
+        <button class="close-btn" (click)="closeTalukaDialog()">×</button>
+      </div>
+
+      <div class="dialog-content">
+        <div class="form-group">
+          <label>District</label>
+          <input type="text" [value]="currentDistrict.name" disabled>
+        </div>
+
+        <div class="form-group">
+          <label>Taluka Name</label>
+          <input type="text" [(ngModel)]="currentTaluka.name" placeholder="Enter taluka name">
+        </div>
+
+        <div class="form-group">
+          <label class="status-label">Status</label>
+          <div class="toggle-container">
+            <label class="switch">
+              <input type="checkbox" [(ngModel)]="currentTaluka.isActive">
+              <span class="slider round"></span>
+            </label>
+            <span class="status-text">{{ currentTaluka.isActive ? 'Active' : 'Inactive' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="cancel-btn" (click)="closeTalukaDialog()">Cancel</button>
+        <button class="save-btn" (click)="saveTaluka()">Save</button>
+      </div>
     </div>
   </div>
 </div>

@@ -17,8 +17,8 @@
     <table class="users-table">
       <thead>
       <tr>
-        <th>Name</th>
-        <th>Whats App Number</th>
+        <th>User Name</th>
+        <th>Number</th>
         <th>Subscription</th>
         <th>Actions</th>
       </tr>
@@ -60,12 +60,21 @@
         <h3>User Info</h3>
         <button class="btn close" (click)="selectedUser = null">Close</button>
       </div>
+
+      <!-- First Row -->
+      <div class="user-info-row">
+        <span><strong>Firm Name:</strong> {{ selectedUser.firmName }}</span>
+        <span><strong>Registration Date:</strong> {{ selectedUser.registrationDate | date: 'dd MMM yyyy' }}</span>
+      </div>
+
+      <!-- Second Row -->
       <div class="user-info-row">
         <span><strong>Name:</strong> {{ selectedUser.name }}</span>
         <span><strong>Mobile:</strong> {{ selectedUser.mobile }}</span>
         <span><strong>Address:</strong> {{ selectedUser.address }}</span>
         <span><strong>Credits:</strong> {{ selectedUser.credits }}</span>
       </div>
+
 
       <div class="dialog-row">
         <!-- Firms Section -->
@@ -156,8 +165,18 @@
     <div class="dialog-box animate">
       <h3>Edit User</h3>
       <div class="dialog-row">
-        <label>Name: <input [(ngModel)]="editingUser.name"></label>
-        <label>Mobile: <input [(ngModel)]="editingUser.mobile"></label>
+        <label>Firm Name:
+          <input [(ngModel)]="editingUser.firmName">
+        </label>
+        <label>Full Name:
+          <input [(ngModel)]="editingUser.name">
+        </label>
+        <label>Mobile Number:
+          <input [(ngModel)]="editingUser.mobile">
+        </label>
+        <label>Address:
+          <input [(ngModel)]="editingUser.address">
+        </label>
       </div>
       <div class="button-row">
         <button class="btn save" (click)="saveUser()">Save</button>
@@ -165,4 +184,5 @@
       </div>
     </div>
   </div>
+
 </div>

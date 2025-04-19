@@ -1,65 +1,483 @@
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #3f51b5;
-  }
-
-  .full-width {
-    width: 100%;
-  }
-
-  table {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  mat-icon {
-    font-size: 20px;
-  }
-}
-
-.dialog-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.dialog-box {
-  background: #fff;
+.district-management {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   padding: 24px;
-  border-radius: 12px;
-  width: 400px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.3s ease;
+  background-color: #f8fafc;
+  flex: 1;
+  overflow-y: auto;
+  height: 100vh;
+  color: #334155;
 
-  h3 {
-    margin-bottom: 20px;
-    color: #3f51b5;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 24px;
+      margin: 0;
+      color: #333;
+    }
+
+    .add-btn {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #1976d2;
+      }
+
+      .icon {
+        margin-right: 8px;
+        font-size: 18px;
+      }
+    }
   }
 
-  .actions {
+  .district-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 24px;
+
+    .district-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+
+      &.inactive {
+        opacity: 0.75;
+        border-left: 4px solid #f44336;
+      }
+
+      .district-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background-color: #f5f7fa;
+        border-bottom: 1px solid #e0e0e0;
+
+        .district-title {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+          }
+        }
+
+        .district-actions {
+          display: flex;
+          gap: 8px;
+
+          button {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+
+            i {
+              margin-right: 4px;
+              font-size: 14px;
+            }
+
+            &.status-btn {
+              &.activate {
+                background-color: #4caf50;
+                color: white;
+
+                &:hover {
+                  background-color: #43a047;
+                }
+              }
+
+              &.deactivate {
+                background-color: #757575;
+                color: white;
+
+                &:hover {
+                  background-color: #616161;
+                }
+              }
+            }
+
+            &.edit-btn {
+              background-color: #ffb74d;
+              color: white;
+
+              &:hover {
+                background-color: #ffa726;
+              }
+            }
+
+            &.delete-btn {
+              background-color: #ef5350;
+              color: white;
+
+              &:hover {
+                background-color: #e53935;
+              }
+            }
+          }
+        }
+      }
+
+      .talukas-container {
+        padding: 20px;
+
+        .talukas-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+
+          h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #555;
+          }
+
+          .add-taluka-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+
+            &:hover {
+              background-color: #43a047;
+            }
+
+            .icon {
+              margin-right: 4px;
+              font-size: 14px;
+            }
+          }
+        }
+
+        .taluka-table {
+          width: 100%;
+          border-collapse: collapse;
+
+          th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+          }
+
+          th {
+            font-weight: 600;
+            color: #555;
+            background-color: #f9f9f9;
+          }
+
+          .inactive-row {
+            background-color: #f9f9f9;
+            color: #757575;
+          }
+
+          .taluka-actions {
+            display: flex;
+            gap: 8px;
+
+            button {
+              width: 34px;
+              height: 34px;
+              border-radius: 6px;
+              border: none;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              mat-icon {
+                color: white;
+                font-size: 20px;
+              }
+
+              &.status-btn-small {
+                &.activate {
+                  background-color: #4caf50;
+
+                  &:hover {
+                    background-color: #43a047;
+                  }
+                }
+
+                &.deactivate {
+                  background-color: #757575;
+
+                  &:hover {
+                    background-color: #616161;
+                  }
+                }
+              }
+
+              &.edit-btn-small {
+                background-color: #ffb74d;
+
+                &:hover {
+                  background-color: #ffa726;
+                }
+              }
+
+              &.delete-btn-small {
+                background-color: #ef5350;
+
+                &:hover {
+                  background-color: #e53935;
+                }
+              }
+            }
+          }
+
+        }
+
+        .empty-talukas {
+          text-align: center;
+          padding: 24px;
+          color: #757575;
+          background-color: #f9f9f9;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .empty-districts {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px;
+      color: #757575;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+  }
+
+  // Status badge styling
+  .status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    &.active {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: #4caf50;
+      border: 1px solid #4caf50;
+    }
+
+    &.inactive {
+      background-color: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+      border: 1px solid #f44336;
+    }
+  }
+
+  // Toggle switch styling
+  .toggle-container {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
     gap: 10px;
-    margin-top: 20px;
+  }
+
+  .status-label {
+    margin-bottom: 8px;
+  }
+
+  .status-text {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .slider {
+        background-color: #4caf50;
+      }
+
+      &:checked + .slider:before {
+        transform: translateX(26px);
+      }
+    }
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+    }
+
+    &.round {
+      border-radius: 24px;
+
+      &:before {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .dialog-box {
+      background-color: white;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: dialog-fade-in 0.2s ease-out;
+
+      .dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e0e0e0;
+
+        h3 {
+          margin: 0;
+          font-size: 18px;
+        }
+
+        .close-btn {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #757575;
+
+          &:hover {
+            color: #333;
+          }
+        }
+      }
+
+      .dialog-content {
+        padding: 20px;
+
+        .form-group {
+          margin-bottom: 16px;
+
+          label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+          }
+
+          input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+
+            &:focus {
+              outline: none;
+              border-color: #2196f3;
+              box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+            }
+
+            &:disabled {
+              background-color: #f5f5f5;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 16px 20px;
+        border-top: 1px solid #e0e0e0;
+
+        button {
+          padding: 8px 16px;
+          border-radius: 4px;
+          border: none;
+          cursor: pointer;
+          font-weight: 500;
+
+          &.cancel-btn {
+            background-color: #f5f5f5;
+            color: #333;
+
+            &:hover {
+              background-color: #e0e0e0;
+            }
+          }
+
+          &.save-btn {
+            background-color: #2196f3;
+            color: white;
+
+            &:hover {
+              background-color: #1976d2;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
-@keyframes fadeIn {
+@keyframes dialog-fade-in {
   from {
     opacity: 0;
     transform: scale(0.95);
@@ -67,5 +485,33 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+// Make it responsive
+@media (max-width: 768px) {
+  .district-management {
+    .district-list {
+      grid-template-columns: 1fr;
+    }
+
+    .dialog-box {
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .district-header {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .district-title {
+        margin-bottom: 10px;
+      }
+
+      .district-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
   }
 }

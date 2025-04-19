@@ -62,8 +62,10 @@ export class DashboardComponent {
   users = [
     {
       name: 'User 1',
+      firmName: 'XYZ Firm',
       mobile: '98765432101',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [
         {
@@ -117,8 +119,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 2',
+      firmName: 'XYZ Firm',
       mobile: '98765432102',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [
         {
@@ -159,8 +163,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 3',
+      firmName: 'XYZ Firm',
       mobile: '98765432103',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -186,8 +192,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 4',
+      firmName: 'XYZ Firm',
       mobile: '98765432104',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [
         {
@@ -228,8 +236,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 5',
+      firmName: 'XYZ Firm',
       mobile: '98765432105',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -255,8 +265,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 6',
+      firmName: 'XYZ Firm',
       mobile: '98765432106',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [
         {
@@ -297,8 +309,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 7',
+      firmName: 'XYZ Firm',
       mobile: '98765432107',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [],
       firms: [
@@ -324,8 +338,10 @@ export class DashboardComponent {
     },
     {
       name: 'User 8',
+      firmName: 'XYZ Firm',
       mobile: '98765432108',
       otherNumbers: '7972726558, 8530412675',
+      registrationDate : "2024-04-18T14:30:00Z",
       address: 'Nagpur',
       subscriptions: [
         {
