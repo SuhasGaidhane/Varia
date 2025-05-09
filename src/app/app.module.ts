@@ -34,6 +34,7 @@ import {
 } from '@angular/material/card';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatDatepickerInput,
     MatCardImage,
     MatCardTitle,
-    MatNativeDateModule
+    MatNativeDateModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent, DashboardComponent]

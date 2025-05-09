@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../services/api.service';
+import {MatDialog} from '@angular/material/dialog';
+import {FormBuilder} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-firm',
@@ -6,7 +10,16 @@ import { Component } from '@angular/core';
   templateUrl: './manage-firm.component.html',
   styleUrl: './manage-firm.component.scss'
 })
-export class ManageFirmComponent {
+export class ManageFirmComponent implements OnInit{
+
+  constructor(
+    private snackBar: MatSnackBar,
+    private apiService: ApiService,
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) {}
+
+
   searchQuery = '';
   selectedDistrict = '';
   selectedTaluka = '';
@@ -24,64 +37,104 @@ export class ManageFirmComponent {
     email: '',
     mfmsNumber: '',
     address: '',
+    city: '', // ✅ Add this
     district: '',
+    district_id : '',
     taluka: '',
+    taluka_id: '',
     gst: '',
-    image: '',
+    firm_image: '',
     isActive: true
   };
 
-  districts: string[] = ['Nagpur', 'Amravati', 'Akola', 'Wardha'];
+  // // districts: string[] = ['Nagpur', 'Amravati', 'Akola', 'Wardha'];
+  // //
+  // // Map districts to their talukas
+  // districtTalukaMap: { [key: string]: string[] } = {
+  //   'Nagpur': ['Nagpur Urban', 'Nagpur Rural', 'Kamptee', 'Hingna', 'Ramtek', 'Umred'],
+  //   'Amravati': ['Amravati', 'Achalpur', 'Chandur Railway', 'Dhamangaon', 'Morshi'],
+  //   'Akola': ['Akola', 'Balapur', 'Barshitakli', 'Murtijapur', 'Patur', 'Telhara'],
+  //   'Wardha': ['Wardha', 'Arvi', 'Ashti', 'Deoli', 'Hinganghat', 'Samudrapur']
+  // };
 
-  // Map districts to their talukas
-  districtTalukaMap: { [key: string]: string[] } = {
-    'Nagpur': ['Nagpur Urban', 'Nagpur Rural', 'Kamptee', 'Hingna', 'Ramtek', 'Umred'],
-    'Amravati': ['Amravati', 'Achalpur', 'Chandur Railway', 'Dhamangaon', 'Morshi'],
-    'Akola': ['Akola', 'Balapur', 'Barshitakli', 'Murtijapur', 'Patur', 'Telhara'],
-    'Wardha': ['Wardha', 'Arvi', 'Ashti', 'Deoli', 'Hinganghat', 'Samudrapur']
-  };
 
-  firms: any[] = [
-    {
-      name: 'Agro Mart',
-      owner: 'Ravi Kumar',
-      mobile: '7972726558',
-      otherMobile: '9876543210',
-      email: 'ravi@agromart.com',
-      mfmsNumber: 'MFMS123456',
-      address: 'MG Road, Nagpur',
-      district: 'Nagpur',
-      taluka: 'Nagpur Urban',
-      gst: '27AABCU9603R1Z2',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs_d7KFhikyJ65amGDjDgxk1ktCMwx54EjDQ&s',
-      isActive: true
-    },
-    {
-      name: 'Farmers First',
-      owner: 'Pooja Deshmukh',
-      mobile: '8530412675',
-      otherMobile: '7894561230',
-      email: 'pooja@farmersfirst.com',
-      mfmsNumber: 'MFMS789012',
-      address: 'Main Road, Akola',
-      district: 'Akola',
-      taluka: 'Akola',
-      gst: '27AACCD1234B1Z5',
-      image: 'https://content.jdmagicbox.com/comp/thrissur/h9/9999px487.x487.200622101826.s4h9/catalogue/cheringal-agri-shop-mannuthy-thrissur-flower-pot-dealers-rqunkbp6xz.jpg',
-      isActive: true
+  ngOnInit(): void {
+
+    this.getAllFirmList()
+    this.getDistrictsWithTalukas()
+  }
+
+
+  districts: string[] = [];
+  districtTalukaMap: { [district: string]: string[] } = {};
+
+  getDistrictsWithTalukasData: any[] = [];
+
+  async getDistrictsWithTalukas() {
+    try {
+      const data = await this.apiService.getDistrictsWithTalukas().toPromise();
+      if (data) {
+        this.getDistrictsWithTalukasData = data;
+
+        // Extract district names
+        this.districts = this.getDistrictsWithTalukasData.map(d => d.name);
+
+        // Build district–taluka map
+        this.districtTalukaMap = {};
+        this.getDistrictsWithTalukasData.forEach(district => {
+          this.districtTalukaMap[district.name] = district.talukas.map((t: { name: string }) => t.name);
+        });
+
+      } else {
+        this.getDistrictsWithTalukasData = [];
+        this.districts = [];
+        this.districtTalukaMap = {};
+      }
+    } catch (error) {
+      console.error('Error fetching Districts and Talukas Data:', error);
+      this.getDistrictsWithTalukasData = [];
+      this.districts = [];
+      this.districtTalukaMap = {};
     }
-  ];
+  }
+
+
+
+
+  firms: any[] = [];
+
+  async getAllFirmList() {
+    try {
+      const data = await this.apiService.getAllFirmList().toPromise();
+      if (data.status) {
+        this.firms = data.details
+      } else {
+        this.firms = [];
+      }
+    } catch (error) {
+      console.error('Error fetching Firms:', error);
+      this.firms = [];
+    }
+  }
+
+
+
+
 
   filteredFirms() {
     return this.firms.filter(firm => {
+      const search = this.searchQuery?.toLowerCase() || '';
+
       const matchesSearch =
         !this.searchQuery ||
-        firm.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        firm.owner.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        firm.mobile.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        (firm.email && firm.email.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
-        (firm.otherMobile && firm.otherMobile.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
-        (firm.mfmsNumber && firm.mfmsNumber.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        (firm.name?.toLowerCase()?.includes(search)) ||
+        (firm.owner?.toLowerCase()?.includes(search)) ||
+        (firm.mobile?.toLowerCase()?.includes(search)) ||
+        (firm.email?.toLowerCase()?.includes(search)) ||
+        (firm.otherMobile?.toLowerCase()?.includes(search)) ||
+        (firm.district?.toLowerCase()?.includes(search)) ||
+        (firm.taluka?.toLowerCase()?.includes(search)) ||
+        (firm.mfmsNumber?.toLowerCase()?.includes(search));
 
       const matchesDistrict =
         !this.selectedDistrict || firm.district === this.selectedDistrict;
@@ -98,16 +151,24 @@ export class ManageFirmComponent {
     });
   }
 
+
   openPopup(firm: any = null) {
     this.editingFirm = firm;
     this.popupVisible = true;
 
     if (firm) {
-      this.formData = { ...firm };
+      this.formData = {
+        ...firm,
+        firm_image: firm.firm_image
+          ? 'https://variaindia.com/VariaAPI/' + firm.firm_image
+          : ''
+      };
       // Set available talukas based on selected district
       if (this.formData.district) {
         this.availableTalukas = this.districtTalukaMap[this.formData.district] || [];
+
       }
+
     } else {
       this.formData = {
         name: '',
@@ -117,10 +178,13 @@ export class ManageFirmComponent {
         email: '',
         mfmsNumber: '',
         address: '',
+        city: '',
         district: '',
+        district_id : '',
         taluka: '',
+        taluka_id: '',
         gst: '',
-        image: '',
+        firm_image: '',
         isActive: true
       };
       this.availableTalukas = [];
@@ -133,19 +197,95 @@ export class ManageFirmComponent {
   }
 
   saveFirm() {
-    if (this.editingFirm) {
-      const index = this.firms.indexOf(this.editingFirm);
-      this.firms[index] = { ...this.formData };
-    } else {
-      this.firms.push({ ...this.formData });
+    const formDataToSend = new FormData();
+
+    // Common form data for both add and update
+    formDataToSend.append('shop_name', this.formData.name);
+    formDataToSend.append('proprieter_name', this.formData.owner);
+    formDataToSend.append('mobile', this.formData.mobile);
+    formDataToSend.append('otherNumbers', this.formData.otherMobile);
+    formDataToSend.append('email', this.formData.email);
+    formDataToSend.append('address', this.formData.address);
+    formDataToSend.append('city', this.formData.city);
+    formDataToSend.append('gst', this.formData.gst);
+    formDataToSend.append('mfms', this.formData.mfmsNumber);
+    formDataToSend.append('district_id', this.formData.district_id);
+    formDataToSend.append('taluka_id', this.formData.taluka_id);
+    formDataToSend.append('isActive', this.formData.isActive ? '1' : '0');
+
+    // Use the stored File object for the image, if available
+    if (this.selectedFirmImage) {
+      formDataToSend.append('firm_image', this.selectedFirmImage, this.selectedFirmImage.name);
     }
 
-    this.closePopup();
+    if (this.editingFirm) {
+      // Update existing firm
+      formDataToSend.append('masterFirmId', this.editingFirm.masterFirmId);
+
+      this.apiService.updateFirm(formDataToSend).subscribe({
+        next: (response: any) => {
+          if (response.status === 'success') {
+            console.log('Firm updated successfully:', response);
+            this.showNotification('Firm updated successfully');
+            // Get updated data from server
+            this.getAllFirmList();
+            this.closePopup();
+          } else {
+            console.error('Server responded with error:', response.message);
+            alert('Error: ' + (response.message || 'Something went wrong'));
+          }
+        },
+        error: (error) => {
+          console.error('Request failed:', error);
+          alert('Failed to update firm due to a network or server error.');
+        }
+      });
+    } else {
+      // Add new firm
+      this.apiService.addFirm(formDataToSend).subscribe({
+        next: (response: any) => {
+          if (response.status === 'success') {
+            console.log('Firm added successfully:', response);
+            this.showNotification('Firm added successfully');
+            // Get updated data from server
+            this.getAllFirmList();
+            this.closePopup();
+          } else {
+            console.error('Server responded with error:', response.message);
+            alert('Error: ' + (response.message || 'Something went wrong'));
+          }
+        },
+        error: (error) => {
+          console.error('Request failed:', error);
+          alert('Failed to add firm due to a network or server error.');
+        }
+      });
+    }
   }
 
+
+
   deleteFirm(firm: any) {
-    this.firms = this.firms.filter(f => f !== firm);
+    if (!firm.masterFirmId) {
+      alert('Invalid firm ID');
+      return;
+    }
+
+    this.apiService.deleteFirm(firm.masterFirmId).subscribe({
+      next: (response: any) => {
+        if (response.status === 'success') {
+          this.firms = this.firms.filter(f => f !== firm);
+          this.showNotification('Firm deleted successfully');
+        } else {
+          alert('Error: ' + (response.message || 'Something went wrong'));
+        }
+      },
+      error: () => {
+        alert('Failed to delete firm due to a network or server error.');
+      }
+    });
   }
+
 
   toggleFirmStatus(firm: any) {
     firm.isActive = !firm.isActive;
@@ -155,37 +295,89 @@ export class ManageFirmComponent {
     this.activeStatusFilter = status;
   }
 
+  selectedFirmImage: File | null = null;
+
   handleImageUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
+      // Store the actual file object for later use when submitting the form
+      this.selectedFirmImage = file;
+
+      // Create preview
       const reader = new FileReader();
       reader.onload = e => {
-        this.formData.image = (e.target as FileReader).result;
+        // This is just for preview purposes
+        this.formData.imagePreview = (e.target as FileReader).result;
       };
       reader.readAsDataURL(file);
     }
   }
 
+  // Update this method to set district_id when a district is selected
   onDistrictChange() {
-    // Update available talukas when district changes in form
+    // Find the selected district in the districts data
     if (this.formData.district) {
-      this.availableTalukas = this.districtTalukaMap[this.formData.district] || [];
-      // Reset taluka when district changes
-      this.formData.taluka = '';
+      const selectedDistrictObj = this.getDistrictsWithTalukasData.find(
+        d => d.name === this.formData.district
+      );
+
+      if (selectedDistrictObj) {
+        // Set the district_id
+        this.formData.district_id = selectedDistrictObj.id;
+
+        // Update available talukas
+        this.availableTalukas = selectedDistrictObj.talukas.map((t: any) => t.name);
+
+        // Reset taluka and taluka_id when district changes
+        this.formData.taluka = '';
+        this.formData.taluka_id = '';
+      } else {
+        this.availableTalukas = [];
+      }
     } else {
       this.availableTalukas = [];
+      this.formData.district_id = '';
+    }
+  }
+
+// Add a new method to handle taluka selection
+  onTalukaChange() {
+    if (this.formData.district && this.formData.taluka) {
+      const selectedDistrictObj = this.getDistrictsWithTalukasData.find(
+        d => d.name === this.formData.district
+      );
+
+      if (selectedDistrictObj) {
+        const selectedTalukaObj = selectedDistrictObj.talukas.find(
+          (t: any) => t.name === this.formData.taluka
+        );
+
+        if (selectedTalukaObj) {
+          // Set the taluka_id
+          this.formData.taluka_id = selectedTalukaObj.id;
+        }
+      }
+    } else {
+      this.formData.taluka_id = '';
     }
   }
 
   onFilterDistrictChange() {
-    // Update available talukas for filter when district filter changes
     if (this.selectedDistrict) {
       this.filterTalukas = this.districtTalukaMap[this.selectedDistrict] || [];
-      // Reset taluka filter when district changes
       this.selectedTaluka = '';
     } else {
       this.filterTalukas = [];
       this.selectedTaluka = '';
     }
   }
+
+  showNotification(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000, // milliseconds
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  }
+
 }

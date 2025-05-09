@@ -27,7 +27,7 @@
           <div class="status-badge" [ngClass]="{'active': offer.isActive, 'inactive': !offer.isActive}">
             {{ offer.isActive ? 'Active' : 'Inactive' }}
           </div>
-          <img mat-card-image [src]="offer.imageUrl" alt="Offer image">
+          <img mat-card-image [src]="'https://variaindia.com/VariaAPI/' + offer.imageUrl" alt="Offer image">
           <mat-card-header>
             <mat-card-title>{{ offer.title }}</mat-card-title>
           </mat-card-header>
@@ -51,10 +51,10 @@
             <button mat-button color="warn" (click)="confirmDeleteOffer(offer)">
               <mat-icon>delete</mat-icon> Delete
             </button>
-            <button mat-button (click)="toggleOfferStatus(offer)">
-              <mat-icon>{{ offer.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>
-              {{ offer.isActive ? 'Deactivate' : 'Activate' }}
-            </button>
+<!--            <button mat-button (click)="toggleOfferStatus(offer)">-->
+<!--              <mat-icon>{{ offer.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>-->
+<!--              {{ offer.isActive ? 'Deactivate' : 'Activate' }}-->
+<!--            </button>-->
           </mat-card-actions>
         </mat-card>
       </div>
@@ -87,7 +87,7 @@
           </div>
           <div class="plan-features">
             <ul>
-              <li *ngFor="let feature of plan.features">{{ feature }}</li>
+              <li >{{ plan.feature }}</li>
             </ul>
           </div>
           <div class="plan-actions">
@@ -254,15 +254,9 @@
 
         <div class="form-field">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Features (one per line)</mat-label>
-            <textarea matInput formControlName="features" rows="5" placeholder="Enter features, one per line"></textarea>
-          </mat-form-field>
-        </div>
-
-        <div class="form-field">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Popular Tag (leave empty if not popular)</mat-label>
-            <input matInput formControlName="popularTag" placeholder="e.g. Most Popular">
+            <mat-label>Features</mat-label>
+            <textarea matInput formControlName="feature" placeholder="Enter features, one per line"></textarea>
+            <mat-error *ngIf="subscriptionForm.get('feature')?.hasError('required')">Features are required</mat-error>
           </mat-form-field>
         </div>
 
@@ -274,3 +268,4 @@
     </div>
   </div>
 </div>
+

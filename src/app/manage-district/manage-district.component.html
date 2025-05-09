@@ -16,10 +16,10 @@
           </span>
         </div>
         <div class="district-actions">
-          <button class="status-btn" (click)="toggleDistrictStatus(district)" [ngClass]="{'activate': !district.isActive, 'deactivate': district.isActive}">
-            <i class="fas" [ngClass]="{'fa-toggle-on': district.isActive, 'fa-toggle-off': !district.isActive}"></i>
-            {{ district.isActive ? 'Deactivate' : 'Activate' }}
-          </button>
+<!--          <button class="status-btn" (click)="toggleDistrictStatus(district)" [ngClass]="{'activate': !district.isActive, 'deactivate': district.isActive}">-->
+<!--            <i class="fas" [ngClass]="{'fa-toggle-on': district.isActive, 'fa-toggle-off': !district.isActive}"></i>-->
+<!--            {{ district.isActive ? 'Deactivate' : 'Activate' }}-->
+<!--          </button>-->
           <button class="edit-btn" (click)="openDistrictDialog(district)">
             <i class="fas fa-edit"></i> Edit
           </button>
@@ -57,9 +57,9 @@
                 </span>
               </td>
               <td class="taluka-actions">
-                <button class="status-btn-small" (click)="toggleTalukaStatus(district.id, taluka)" [ngClass]="{'activate': !taluka.isActive, 'deactivate': taluka.isActive}">
-                  <mat-icon>{{ taluka.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>
-                </button>
+<!--                <button class="status-btn-small" (click)="toggleTalukaStatus(district.id, taluka)" [ngClass]="{'activate': !taluka.isActive, 'deactivate': taluka.isActive}">-->
+<!--                  <mat-icon>{{ taluka.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>-->
+<!--                </button>-->
 
                 <button class="edit-btn-small" (click)="openTalukaDialog(district, taluka)">
                   <mat-icon>edit</mat-icon>
