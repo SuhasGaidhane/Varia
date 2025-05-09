@@ -38,64 +38,62 @@
     </button>
   </div>
 
-  <div class="table-container">
-    <div class="table-wrapper">
-      <table class="firm-table">
-        <thead>
-        <tr>
-          <th class="sticky-col image-col">Image</th>
-          <th class="sticky-col name-col">Firm Name</th>
-          <th>Owner</th>
-          <th>WhatsApp Number</th>
-          <th>Other Mobile</th>
-          <th>Email</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Taluka</th>
-          <th>District</th>
-          <th>GST No.</th>
-          <th>MFMS Number</th>
-          <th>Status</th>
-          <th class="sticky-col actions-col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let firm of filteredFirms(); let i = index" [class.inactive-row]="!firm.isActive">
-          <td class="sticky-col image-col"><img [src]="'https://variaindia.com/VariaAPI/' + firm.firm_image" alt="Firm Image" class="firm-img" /></td>
-          <td class="sticky-col name-col">{{ firm.name }}</td>
-          <td>{{ firm.owner }}</td>
-          <td>{{ firm.mobile }}</td>
-          <td>{{ firm.otherMobile }}</td>
-          <td>{{ firm.email }}</td>
-          <td>{{ firm.address }}</td>
-          <td>{{ firm.city }}</td>
-          <td>{{ firm.taluka }}</td>
-          <td>{{ firm.district }}</td>
-          <td>{{ firm.gst }}</td>
-          <td>{{ firm.mfmsNumber }}</td>
-          <td>
-              <span class="status-badge" [class.active]="firm.isActive" [class.inactive]="!firm.isActive">
-                {{ firm.isActive ? 'Active' : 'Inactive' }}
-              </span>
-          </td>
-          <td class="sticky-col actions-col">
-            <button class="edit-btn" (click)="openPopup(firm)" title="Edit">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="delete-btn" (click)="deleteFirm(firm)" title="Delete">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="filteredFirms().length === 0">
-          <td colspan="14" class="no-data">No firms found.</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="table-wrapper">
+    <table class="firm-table">
+      <thead>
+      <tr>
+        <th>Image</th>
+        <th>Firm Name</th>
+        <th>Owner</th>
+        <th>WhatsApp Number</th>
+        <th>Other Mobile</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Taluka</th>
+        <th>District</th>
+        <th>GST No.</th>
+        <th>MFMS Number</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let firm of filteredFirms(); let i = index" [class.inactive-row]="!firm.isActive">
+        <td><img [src]="firm.image" alt="Firm Image" class="firm-img" /></td>
+        <td>{{ firm.name }}</td>
+        <td>{{ firm.owner }}</td>
+        <td>{{ firm.mobile }}</td>
+        <td>{{ firm.otherMobile }}</td>
+        <td>{{ firm.email }}</td>
+        <td>{{ firm.address }}</td>
+        <td>{{ firm.taluka }}</td>
+        <td>{{ firm.district }}</td>
+        <td>{{ firm.gst }}</td>
+        <td>{{ firm.mfmsNumber }}</td>
+        <td>
+          <span class="status-badge" [class.active]="firm.isActive" [class.inactive]="!firm.isActive">
+            {{ firm.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td class="action-buttons">
+          <button class="edit-btn" (click)="openPopup(firm)">Edit</button>
+          <button class="delete-btn" (click)="deleteFirm(firm)">Delete</button>
+          <button
+            class="status-btn"
+            [class.activate-btn]="!firm.isActive"
+            [class.deactivate-btn]="firm.isActive"
+            (click)="toggleFirmStatus(firm)">
+            {{ firm.isActive ? 'Deactivate' : 'Activate' }}
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredFirms().length === 0">
+        <td colspan="13" class="no-data">No firms found.</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- Rest of the code remains the same for popup -->
   <div class="popup-overlay" *ngIf="popupVisible">
     <div class="popup-content">
       <h3>{{ editingFirm ? 'Edit Firm' : 'Add Firm' }}</h3>
@@ -150,11 +148,6 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>City:</label>
-          <input [(ngModel)]="formData.city" placeholder="e.g. Nagpur" />
-        </div>
-
-        <div class="form-group">
           <label>District:</label>
           <select [(ngModel)]="formData.district" (change)="onDistrictChange()">
             <option value="">Select District</option>
@@ -164,7 +157,7 @@
 
         <div class="form-group">
           <label>Taluka:</label>
-          <select [(ngModel)]="formData.taluka" (change)="onTalukaChange()">
+          <select [(ngModel)]="formData.taluka">
             <option value="">Select Taluka</option>
             <option *ngFor="let taluka of availableTalukas" [value]="taluka">{{ taluka }}</option>
           </select>
@@ -172,22 +165,10 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group image-upload">
+        <div class="form-group">
           <label>Upload Photo:</label>
-          <input type="file" (change)="handleImageUpload($event)" #fileInput />
-
-          <div class="image-preview-container">
-            <!-- Show newly selected image preview -->
-            <img *ngIf="formData.imagePreview" [src]="formData.imagePreview" class="preview-img" alt="New Image Preview" />
-
-            <!-- Show existing image if no new image selected -->
-            <img *ngIf="!formData.imagePreview && formData.firm_image" [src]="formData.firm_image" class="preview-img" alt="Existing Image Preview" />
-
-            <!-- No image selected message -->
-            <div *ngIf="!formData.imagePreview && !formData.firm_image" class="no-image">
-              No image selected
-            </div>
-          </div>
+          <input type="file" (change)="handleImageUpload($event)" />
+          <img *ngIf="formData.image" [src]="formData.image" class="preview-img" alt="Preview" />
         </div>
 
         <div class="form-group status-toggle">
